@@ -410,11 +410,25 @@ function updateRankingsPanel() {
     const rankedCount = document.getElementById('rankedCount');
     const progressFill = document.getElementById('progressFill');
     const topRankings = document.getElementById('topRankings');
+    const submitButton = document.getElementById('exportBracket');
+    const submitNote = document.getElementById('submitNote');
 
     // Update count
     const count = Object.keys(rankings).length;
     rankedCount.textContent = count;
     progressFill.style.width = (count / 64) * 100 + '%';
+
+    const allRanked = count === 64;
+    if (submitButton) {
+        submitButton.disabled = !allRanked;
+        submitButton.setAttribute('aria-disabled', String(!allRanked));
+    }
+    if (submitNote) {
+        submitNote.textContent = allRanked
+            ? 'All teams ranked. You can submit your bracket.'
+            : 'Rank all 64 teams to enable Submit.';
+        submitNote.classList.toggle('is-ready', allRanked);
+    }
 
     // Get top 10 ranked teams
     const topTeams = Object.entries(rankings)
@@ -488,8 +502,8 @@ function setupEventListeners() {
 
 // Export bracket as JSON
 function exportBracket() {
-    if (Object.keys(rankings).length === 0) {
-        alert('Please rank at least one team before exporting.');
+    if (Object.keys(rankings).length !== 64) {
+        alert('Please rank all 64 teams before submitting your bracket.');
         return;
     }
 

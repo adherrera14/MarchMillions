@@ -30,7 +30,7 @@ body {
 
 /* Header */
 header {
-    background: linear-gradient(135deg, #000000 0%, #12141d 100%);
+    background: #000000;
     color: #ffffff;
     padding: 2rem;
     text-align: center;
@@ -54,6 +54,16 @@ header h1 {
     gap: 1rem;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+.submit-note {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: #c8c8c8;
+}
+
+.submit-note.is-ready {
+    display: none;
 }
 
 /* Main Content */
@@ -174,7 +184,7 @@ header h1 {
 
 .bracket-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin: 2rem 0;
 }
 
 .bracket-header h2 {
@@ -453,6 +463,18 @@ header h1 {
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+    transform: none;
+}
+
+.btn-primary:disabled {
+    background-color: #6b6352;
+    color: #000000;
 }
 
 .btn-primary {

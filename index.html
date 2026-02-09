@@ -13,11 +13,12 @@
     <div class="container">
         <header>
             <h1>March Millions</h1>
-            <p class="subtitle">NCAA Basketball Tournament - Team Ranking (1-64)</p>
+            <p class="subtitle">Assign points to each team in our tournament bracket. Win $5,000,000 if you achieve the maximum score of 3,381 points!</p>
             <div class="header-controls">
                 <button id="clearAll" class="btn btn-secondary">Clear All Rankings</button>
-                <button id="exportBracket" class="btn btn-primary">Submit Bracket</button>
+                <button id="exportBracket" class="btn btn-primary" disabled>Submit Bracket</button>
             </div>
+            <p id="submitNote" class="submit-note">Rank all 64 teams to enable Submit.</p>
         </header>
 
         <div class="main-content">
@@ -42,7 +43,7 @@
             <!-- Center: Bracket Display -->
             <main class="bracket-container">
                 <div class="bracket-header">
-                    <h2>Tournament Bracket</h2>
+                    <h2>2026 NCAA Basketball Tournament Free Contest</h2>
                     <p class="instructions">Click on a team to rank it (1-64). 64 = Best, 1 = Worst</p>
                 </div>
 
