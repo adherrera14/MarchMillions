@@ -13,6 +13,7 @@
     --border-color: #d4b962;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+    --bracket-row-height: 44px;
 }
 
 body {
@@ -240,6 +241,7 @@ header h1 {
     border-radius: 8px;
     padding: 0;
     box-shadow: var(--shadow);
+    overflow: visible;
 }
 
 .region.active {
@@ -258,10 +260,66 @@ header h1 {
 }
 
 .teams-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
     padding: 0.8rem;
+}
+
+.region-bracket {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.8rem 0.8rem 1.2rem;
+    min-height: 560px;
+    position: relative;
+}
+
+.region-bracket.bracket-right {
+    flex-direction: row-reverse;
+}
+
+.team-column {
+    display: grid;
+    grid-template-rows: repeat(16, var(--row-height, 44px));
+    gap: 0;
+    flex: 0 0 280px;
+}
+
+.team-slot {
+    height: var(--row-height, 44px);
+    display: flex;
+    align-items: center;
+}
+
+.region-bracket .team-card {
+    width: 100%;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.75rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.region-bracket .team-name {
+    flex: 1;
+}
+
+.bracket-lines {
+    flex: 1;
+    min-width: 320px;
+    height: calc(var(--row-height, 44px) * 16);
+    position: relative;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.bracket-lines svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    min-width: 0;
+}
+
+.region-bracket.bracket-right .bracket-lines {
+    transform: scaleX(-1);
 }
 
 /* Team Cards */
@@ -283,7 +341,7 @@ header h1 {
 .team-card:hover {
     border-color: #d4b962;
     box-shadow: var(--shadow);
-    transform: translateX(4px);
+    transform: translateY(-2px);
 }
 
 .team-card.ranked {
@@ -770,13 +828,20 @@ header h1 {
         top: 0;
     }
 
-    .teams-grid {
-        grid-template-columns: repeat(4, 1fr);
-        padding: 0.8rem;
+    .region-bracket {
+        gap: 0.5rem;
+        min-height: 520px;
+    }
+
+    .team-column {
+        flex: 0 0 240px;
     }
 }
 
 @media (max-width: 768px) {
+    :root {
+        --bracket-row-height: 40px;
+    }
     header h1 {
         font-size: 1.5rem;
     }
@@ -818,6 +883,8 @@ header h1 {
 
     .bracket-wrapper {
         padding: 0;
+        overflow-x: hidden;
+        overflow-y: visible;
     }
 
     .region-title {
@@ -825,10 +892,29 @@ header h1 {
         padding: 0.6rem;
     }
 
-    .teams-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.35rem;
+    .region-bracket {
+        flex-direction: row;
+        align-items: flex-start;
+        min-height: 0;
         padding: 0.5rem;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .team-column {
+        grid-template-rows: repeat(16, 40px);
+        flex: 0 0 200px;
+    }
+
+    .team-slot {
+        height: 40px;
+    }
+
+    .bracket-lines {
+        flex: 1;
+        min-width: 0;
+        max-width: 300px;
+        height: calc(var(--row-height, 40px) * 16);
     }
 
     .team-card {
@@ -883,10 +969,8 @@ header h1 {
         grid-template-columns: 1fr;
     }
 
-    .teams-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.3rem;
-        padding: 0.4rem;
+    .region-bracket {
+        gap: 0.6rem;
     }
 
     .team-card {

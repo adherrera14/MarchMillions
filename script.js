@@ -120,6 +120,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Setup region tabs
     setupRegionTabs();
+    
+    // Render lines for initially active region
+    setTimeout(() => {
+        renderActiveBracketLines();
+    }, 100);
+
+    window.addEventListener('resize', () => {
+        clearTimeout(window._bracketResizeTimer);
+        window._bracketResizeTimer = setTimeout(() => {
+            renderActiveBracketLines();
+        }, 150);
+    });
 });
 
 // Render the bracket display
@@ -130,6 +142,8 @@ function renderBracket() {
         'Midwest Region': 'regionMidwest',
         'South Region': 'regionSouth'
     };
+
+    const leftToRightRegions = new Set(['East Region', 'South Region']);
 
     TOURNAMENT_DATA.regions.forEach(region => {
         const regionElement = document.getElementById(regionMap[region.name]);
@@ -144,17 +158,139 @@ function renderBracket() {
             teamsBySeed[team.seed].push(team);
         });
 
-        // Display teams sorted by seed
-        Object.keys(teamsBySeed)
-            .map(Number)
-            .sort((a, b) => a - b)
-            .forEach(seed => {
-                teamsBySeed[seed].forEach(team => {
-                    const teamCard = createTeamCard(team);
-                    regionElement.appendChild(teamCard);
-                });
+        const seedPairs = [
+            [1, 16],
+            [8, 9],
+            [5, 12],
+            [4, 13],
+            [6, 11],
+            [3, 14],
+            [7, 10],
+            [2, 15]
+        ];
+
+        const teamOrder = seedPairs.flat();
+
+        const bracket = document.createElement('div');
+        const directionClass = leftToRightRegions.has(region.name) ? 'bracket-left' : 'bracket-right';
+        bracket.className = `region-bracket ${directionClass}`;
+
+        const rootStyles = getComputedStyle(document.documentElement);
+        const rowHeight = parseFloat(rootStyles.getPropertyValue('--bracket-row-height')) || 44;
+        bracket.style.setProperty('--row-height', `${rowHeight}px`);
+
+        const teamColumn = document.createElement('div');
+        teamColumn.className = 'team-column';
+
+        teamOrder.forEach(seed => {
+            const seedTeams = teamsBySeed[seed] || [];
+            seedTeams.forEach(team => {
+                const teamSlot = document.createElement('div');
+                teamSlot.className = 'team-slot';
+                teamSlot.appendChild(createTeamCard(team));
+                teamColumn.appendChild(teamSlot);
             });
+        });
+
+        const linesWrapper = document.createElement('div');
+        linesWrapper.className = 'bracket-lines';
+        linesWrapper.dataset.regionName = region.name;
+
+        bracket.appendChild(teamColumn);
+        bracket.appendChild(linesWrapper);
+        regionElement.appendChild(bracket);
     });
+}
+
+function buildBracketLines(rowHeight, lineWidth) {
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    const height = rowHeight * 16;
+    
+    // Calculate x positions based on available width
+    const x0 = 0;
+    const x1 = lineWidth * 0.15;
+    const x2 = lineWidth * 0.38;
+    const x3 = lineWidth * 0.62;
+    const x4 = lineWidth * 0.85;
+    const x5 = lineWidth;
+    const stroke = 'rgba(212, 185, 98, 0.6)';
+
+    svg.setAttribute('viewBox', `0 0 ${lineWidth} ${height}`);
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.setAttribute('aria-hidden', 'true');
+
+    const addLine = (xStart, yStart, xEnd, yEnd) => {
+        const line = document.createElementNS(svgNS, 'line');
+        line.setAttribute('x1', xStart);
+        line.setAttribute('y1', yStart);
+        line.setAttribute('x2', xEnd);
+        line.setAttribute('y2', yEnd);
+        line.setAttribute('stroke', stroke);
+        line.setAttribute('stroke-width', '2');
+        line.setAttribute('stroke-linecap', 'round');
+        svg.appendChild(line);
+    };
+
+    const roundCenters = (roundSpan) => {
+        const matchups = 16 / roundSpan;
+        const centers = [];
+        for (let i = 0; i < matchups; i++) {
+            const startRow = i * roundSpan;
+            const center = (startRow + roundSpan / 2) * rowHeight;
+            centers.push(center);
+        }
+        return centers;
+    };
+
+    const round1Centers = roundCenters(2);
+    const round2Centers = roundCenters(4);
+    const round3Centers = roundCenters(8);
+    const round4Centers = roundCenters(16);
+
+    for (let i = 0; i < 16; i++) {
+        const y = (i + 0.5) * rowHeight;
+        addLine(x0, y, x1, y);
+    }
+
+    for (let i = 0; i < round1Centers.length; i++) {
+        const y1 = (i * 2 + 0.5) * rowHeight;
+        const y2 = y1 + rowHeight;
+        const center = round1Centers[i];
+        addLine(x1, y1, x1, y2);
+        addLine(x1, center, x2, center);
+    }
+
+    for (let i = 0; i < round2Centers.length; i++) {
+        const y1 = round1Centers[i * 2];
+        const y2 = round1Centers[i * 2 + 1];
+        const center = round2Centers[i];
+        addLine(x2, y1, x2, y2);
+        addLine(x2, center, x3, center);
+    }
+
+    for (let i = 0; i < round3Centers.length; i++) {
+        const y1 = round2Centers[i * 2];
+        const y2 = round2Centers[i * 2 + 1];
+        const center = round3Centers[i];
+        addLine(x3, y1, x3, y2);
+        addLine(x3, center, x4, center);
+    }
+
+    for (let i = 0; i < round4Centers.length; i++) {
+        const y1 = round3Centers[0];
+        const y2 = round3Centers[1];
+        addLine(x4, y1, x4, y2);
+    }
+
+    if (round4Centers.length > 0) {
+        const championY = round4Centers[0];
+        addLine(x4, championY, x5, championY);
+    }
+
+    return svg;
 }
 
 // Create a team card element
@@ -576,7 +712,27 @@ function setupRegionTabs() {
             const activeRegion = document.querySelector(`.region[data-region="${regionName}"]`);
             if (activeRegion) {
                 activeRegion.classList.add('active');
+                // Render bracket lines for the newly active region
+                setTimeout(() => renderActiveBracketLines(), 50);
             }
         });
     });
+}
+
+function renderActiveBracketLines() {
+    const activeRegion = document.querySelector('.region.active');
+    if (!activeRegion) return;
+    
+    const linesWrapper = activeRegion.querySelector('.bracket-lines');
+    if (!linesWrapper) return;
+    
+    const actualWidth = linesWrapper.offsetWidth;
+    if (actualWidth === 0) return;
+    
+    const rootStyles = getComputedStyle(document.documentElement);
+    const rowHeight = parseFloat(rootStyles.getPropertyValue('--bracket-row-height')) || 44;
+    
+    const svg = buildBracketLines(rowHeight, actualWidth);
+    linesWrapper.innerHTML = '';
+    linesWrapper.appendChild(svg);
 }
