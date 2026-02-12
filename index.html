@@ -98,11 +98,9 @@
                 <div class="modal-body">
                     <div class="ranking-input">
                         <div class="rank-input-header">
-                            <label>Select Rank (1-64):</label>
-                            <input type="number" id="rankQuickInput" min="1" max="64" placeholder="Type..." class="rank-quick-input">
-                            <span id="rankQuickStatus" class="rank-quick-status"></span>
+                            <label>Select Rank (1-64): <span id="selectedRankDisplay" class="selected-rank-display"></span></label>
                         </div>
-                        <p class="rank-instructions">Click an available rank below or type above</p>
+                        <p class="rank-instructions">Click an available rank below</p>
                         <div class="rank-grid" id="rankGrid"></div>
                     </div>
                     <div class="modal-buttons">
@@ -111,18 +109,6 @@
                         <button id="cancelRank" class="btn btn-tertiary">Cancel</button>
                     </div>
                     <div id="rankingError" class="error-message"></div>
-                    <details class="seed-info scoring-guide">
-                        <summary>Scoring Guide</summary>
-                        <div class="guide-content">
-                            <p><strong>Ranking System:</strong> Assign each team a rank from 1-64</p>
-                            <ul>
-                                <li><span class="rank-badge rank-1">64</span> = Best team</li>
-                                <li><span class="rank-badge rank-2">32</span> = Mid-rank team</li>
-                                <li><span class="rank-badge rank-3">1</span> = Worst team</li>
-                            </ul>
-                            <p><em>Your contest score is based on your team selections and their tournament performance.</em></p>
-                        </div>
-                    </details>
                 </div>
             </div>
         </div>

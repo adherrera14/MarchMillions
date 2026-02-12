@@ -1,103 +1,57 @@
-// 2026 NCAA Tournament Bracket Data
-// Structured as 4 regions with seeds 1-16 per region
-const TOURNAMENT_DATA = {
-    regions: [
-        {
-            name: "East Region",
-            color: "#1a5e1a",
-            teams: [
-                { id: 1, name: "Duke", seed: 1, stats: { kenpom: 1, wins: 28 } },
-                { id: 2, name: "Purdue", seed: 16, stats: { kenpom: 87, wins: 15 } },
-                { id: 3, name: "Kansas", seed: 8, stats: { kenpom: 12, wins: 24 } },
-                { id: 4, name: "Nebraska", seed: 9, stats: { kenpom: 45, wins: 19 } },
-                { id: 5, name: "Marquette", seed: 5, stats: { kenpom: 18, wins: 26 } },
-                { id: 6, name: "Mississippi St", seed: 12, stats: { kenpom: 52, wins: 20 } },
-                { id: 7, name: "Wisconsin", seed: 4, stats: { kenpom: 8, wins: 27 } },
-                { id: 8, name: "Wagner", seed: 13, stats: { kenpom: 135, wins: 17 } },
-                { id: 9, name: "Iowa State", seed: 6, stats: { kenpom: 24, wins: 25 } },
-                { id: 10, name: "Texas Tech", seed: 11, stats: { kenpom: 48, wins: 21 } },
-                { id: 11, name: "Auburn", seed: 3, stats: { kenpom: 5, wins: 28 } },
-                { id: 12, name: "Baylor", seed: 14, stats: { kenpom: 78, wins: 18 } },
-                { id: 13, name: "Miami", seed: 7, stats: { kenpom: 32, wins: 23 } },
-                { id: 14, name: "Mississippi", seed: 10, stats: { kenpom: 56, wins: 20 } },
-                { id: 15, name: "Creighton", seed: 2, stats: { kenpom: 3, wins: 29 } },
-                { id: 16, name: "Johns Hopkins", seed: 15, stats: { kenpom: 112, wins: 16 } },
-            ]
-        },
-        {
-            name: "West Region",
-            color: "#2d8f2d",
-            teams: [
-                { id: 17, name: "Utah State", seed: 1, stats: { kenpom: 2, wins: 29 } },
-                { id: 18, name: "Vermont", seed: 16, stats: { kenpom: 89, wins: 14 } },
-                { id: 19, name: "Oregon", seed: 8, stats: { kenpom: 14, wins: 23 } },
-                { id: 20, name: "Drexel", seed: 9, stats: { kenpom: 51, wins: 19 } },
-                { id: 21, name: "Texas", seed: 5, stats: { kenpom: 19, wins: 25 } },
-                { id: 22, name: "San Diego St", seed: 12, stats: { kenpom: 53, wins: 20 } },
-                { id: 23, name: "Gonzaga", seed: 4, stats: { kenpom: 7, wins: 27 } },
-                { id: 24, name: "Savannah St", seed: 13, stats: { kenpom: 142, wins: 16 } },
-                { id: 25, name: "Arkansas", seed: 6, stats: { kenpom: 26, wins: 24 } },
-                { id: 26, name: "St Mary's", seed: 11, stats: { kenpom: 54, wins: 21 } },
-                { id: 27, name: "Houston", seed: 3, stats: { kenpom: 6, wins: 28 } },
-                { id: 28, name: "USC", seed: 14, stats: { kenpom: 82, wins: 18 } },
-                { id: 29, name: "Colorado St", seed: 7, stats: { kenpom: 31, wins: 24 } },
-                { id: 30, name: "Memphis", seed: 10, stats: { kenpom: 58, wins: 20 } },
-                { id: 31, name: "Baylor", seed: 2, stats: { kenpom: 4, wins: 28 } },
-                { id: 32, name: "Northern Carolina A&T", seed: 15, stats: { kenpom: 115, wins: 15 } },
-            ]
-        },
-        {
-            name: "Midwest Region",
-            color: "#1a5e1a",
-            teams: [
-                { id: 33, name: "Northwestern", seed: 1, stats: { kenpom: 9, wins: 27 } },
-                { id: 34, name: "UIC", seed: 16, stats: { kenpom: 91, wins: 14 } },
-                { id: 35, name: "Kentucky", seed: 8, stats: { kenpom: 16, wins: 23 } },
-                { id: 36, name: "Colgate", seed: 9, stats: { kenpom: 62, wins: 18 } },
-                { id: 37, name: "Dayton", seed: 5, stats: { kenpom: 21, wins: 25 } },
-                { id: 38, name: "College of Charleston", seed: 12, stats: { kenpom: 59, wins: 20 } },
-                { id: 39, name: "UCLA", seed: 4, stats: { kenpom: 11, wins: 26 } },
-                { id: 40, name: "Furman", seed: 13, stats: { kenpom: 140, wins: 16 } },
-                { id: 41, name: "Penn State", seed: 6, stats: { kenpom: 28, wins: 23 } },
-                { id: 42, name: "Grambling", seed: 11, stats: { kenpom: 68, wins: 22 } },
-                { id: 43, name: "Connecticut", seed: 3, stats: { kenpom: 10, wins: 27 } },
-                { id: 44, name: "Valparaiso", seed: 14, stats: { kenpom: 85, wins: 18 } },
-                { id: 45, name: "North Carolina State", seed: 7, stats: { kenpom: 34, wins: 23 } },
-                { id: 46, name: "Richmond", seed: 10, stats: { kenpom: 61, wins: 20 } },
-                { id: 47, name: "Virginia Tech", seed: 2, stats: { kenpom: 13, wins: 26 } },
-                { id: 48, name: "Morgan State", seed: 15, stats: { kenpom: 118, wins: 14 } },
-            ]
-        },
-        {
-            name: "South Region",
-            color: "#2d8f2d",
-            teams: [
-                { id: 49, name: "Duke", seed: 1, stats: { kenpom: 17, wins: 25 } },
-                { id: 50, name: "North Florida", seed: 16, stats: { kenpom: 93, wins: 13 } },
-                { id: 51, name: "Michigan State", seed: 8, stats: { kenpom: 22, wins: 23 } },
-                { id: 52, name: "Wichita State", seed: 9, stats: { kenpom: 63, wins: 18 } },
-                { id: 53, name: "Tennessee", seed: 5, stats: { kenpom: 20, wins: 26 } },
-                { id: 54, name: "New Mexico State", seed: 12, stats: { kenpom: 65, wins: 19 } },
-                { id: 55, name: "Michigan", seed: 4, stats: { kenpom: 15, wins: 25 } },
-                { id: 56, name: "Kennesaw State", seed: 13, stats: { kenpom: 138, wins: 17 } },
-                { id: 57, name: "Oklahoma", seed: 6, stats: { kenpom: 29, wins: 23 } },
-                { id: 58, name: "BYU", seed: 11, stats: { kenpom: 55, wins: 21 } },
-                { id: 59, name: "Louisville", seed: 3, stats: { kenpom: 23, wins: 26 } },
-                { id: 60, name: "Delaware", seed: 14, stats: { kenpom: 88, wins: 17 } },
-                { id: 61, name: "Florida", seed: 7, stats: { kenpom: 33, wins: 23 } },
-                { id: 62, name: "Marquette", seed: 10, stats: { kenpom: 60, wins: 20 } },
-                { id: 63, name: "Arizona", seed: 2, stats: { kenpom: 25, wins: 24 } },
-                { id: 64, name: "Hampton", seed: 15, stats: { kenpom: 120, wins: 15 } },
-            ]
-        }
-    ]
-};
+// Configuration for data source
+// In production, change this to your external API endpoint
+const DATA_SOURCE_URL = './teams.json'; // Local file for development
+// const DATA_SOURCE_URL = 'https://your-api.com/api/teams'; // Production URL
 
-// Create a flat array of all teams for easier access
-const ALL_TEAMS = [];
-TOURNAMENT_DATA.regions.forEach(region => {
-    ALL_TEAMS.push(...region.teams);
-});
+// 2026 NCAA Tournament Bracket Data
+// Will be loaded from JSON file
+let TOURNAMENT_DATA = null;
+let ALL_TEAMS = [];
+
+// Load tournament data from JSON file or external API
+async function loadTournamentData() {
+    try {
+        const response = await fetch(DATA_SOURCE_URL);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        TOURNAMENT_DATA = await response.json();
+        
+        // Create a flat array of all teams for easier access
+        ALL_TEAMS = [];
+        TOURNAMENT_DATA.regions.forEach(region => {
+            ALL_TEAMS.push(...region.teams);
+        });
+        
+        return true;
+    } catch (error) {
+        console.error('Error loading tournament data:', error);
+        // Show error message to user
+        showErrorMessage('Failed to load tournament data. Please refresh the page.');
+        return false;
+    }
+}
+
+// Show error message to user
+function showErrorMessage(message) {
+    const container = document.querySelector('.container');
+    const errorDiv = document.createElement('div');
+    errorDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #ff4444;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 5px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+        z-index: 10000;
+        font-size: 16px;
+    `;
+    errorDiv.textContent = message;
+    container.appendChild(errorDiv);
+}
 
 // Rankings storage
 let rankings = {}; // Map of team ID to rank (1-64)
@@ -105,7 +59,20 @@ let selectedTeam = null;
 let isModalOpen = false;
 
 // Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // Show loading indicator
+    showLoadingIndicator();
+    
+    // Load tournament data from JSON file
+    const dataLoaded = await loadTournamentData();
+    
+    // Hide loading indicator
+    hideLoadingIndicator();
+    
+    if (!dataLoaded) {
+        return; // Exit if data failed to load
+    }
+    
     // Load rankings from localStorage if available
     loadRankings();
     
@@ -133,6 +100,47 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 150);
     });
 });
+
+// Show loading indicator
+function showLoadingIndicator() {
+    const container = document.querySelector('.container');
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'loadingIndicator';
+    loadingDiv.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(18, 20, 29, 0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        font-size: 24px;
+        color: #d4b962;
+    `;
+    loadingDiv.innerHTML = `
+        <div style="text-align: center;">
+            <div style="margin-bottom: 20px;">Loading Tournament Data...</div>
+            <div style="width: 50px; height: 50px; border: 5px solid #d4b962; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+        </div>
+    `;
+    // Add spinning animation
+    const style = document.createElement('style');
+    style.textContent = '@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }';
+    document.head.appendChild(style);
+    
+    container.appendChild(loadingDiv);
+}
+
+// Hide loading indicator
+function hideLoadingIndicator() {
+    const loadingDiv = document.getElementById('loadingIndicator');
+    if (loadingDiv) {
+        loadingDiv.remove();
+    }
+}
 
 // Render the bracket display
 function renderBracket() {
@@ -348,6 +356,16 @@ function generateRankGrid(teamId) {
     const rankGrid = document.getElementById('rankGrid');
     rankGrid.innerHTML = '';
     const currentRank = rankings[teamId];
+    
+    // Update the selected rank display
+    const selectedRankDisplay = document.getElementById('selectedRankDisplay');
+    if (currentRank) {
+        selectedRankDisplay.textContent = currentRank;
+        selectedRankDisplay.style.display = 'inline';
+    } else {
+        selectedRankDisplay.textContent = '';
+        selectedRankDisplay.style.display = 'none';
+    }
 
     for (let rank = 1; rank <= 64; rank++) {
         const rankOption = document.createElement('div');
@@ -370,11 +388,6 @@ function generateRankGrid(teamId) {
 
         rankGrid.appendChild(rankOption);
     }
-
-    // Setup quick input
-    const rankQuickInput = document.getElementById('rankQuickInput');
-    rankQuickInput.value = currentRank || '';
-    rankQuickInput.addEventListener('input', (e) => handleQuickRankInput(e, teamId));
 }
 
 // Select rank from grid
@@ -386,38 +399,11 @@ function selectRankOption(rank) {
     if (selectedOption) {
         selectedOption.classList.add('selected');
     }
-
-    const rankQuickInput = document.getElementById('rankQuickInput');
-    rankQuickInput.value = rank;
-}
-
-// Handle quick rank input
-function handleQuickRankInput(event, teamId) {
-    const rank = parseInt(event.target.value);
-    const statusEl = document.getElementById('rankQuickStatus');
-
-    if (event.target.value === '') {
-        statusEl.textContent = '';
-        document.querySelectorAll('.rank-option').forEach(opt => opt.classList.remove('selected'));
-        return;
-    }
-
-    if (isNaN(rank) || rank < 1 || rank > 64) {
-        statusEl.textContent = '❌ Invalid';
-        statusEl.style.color = '#ff6b6b';
-        return;
-    }
-
-    // Check if rank is taken
-    if (Object.values(rankings).includes(rank) && rankings[teamId] !== rank) {
-        statusEl.textContent = '❌ Taken';
-        statusEl.style.color = '#ff6b6b';
-        return;
-    }
-
-    statusEl.textContent = '✓ Available';
-    statusEl.style.color = '#d4b962';
-    selectRankOption(rank);
+    
+    // Update the selected rank display
+    const selectedRankDisplay = document.getElementById('selectedRankDisplay');
+    selectedRankDisplay.textContent = rank;
+    selectedRankDisplay.style.display = 'inline';
 }
 
 // Close modal
@@ -430,13 +416,21 @@ function closeRankingModal() {
 
 // Confirm ranking
 function confirmRank() {
-    const rankQuickInput = document.getElementById('rankQuickInput');
-    const rank = parseInt(rankQuickInput.value);
     const errorDiv = document.getElementById('rankingError');
+    
+    // Get the selected rank from the grid
+    const selectedOption = document.querySelector('.rank-option.selected');
+    if (!selectedOption) {
+        errorDiv.textContent = 'Please select a rank by clicking on one of the numbers below.';
+        errorDiv.classList.add('show');
+        return;
+    }
+    
+    const rank = parseInt(selectedOption.dataset.rank);
 
     // Validation
     if (isNaN(rank) || rank < 1 || rank > 64) {
-        errorDiv.textContent = 'Please select or enter a valid rank between 1 and 64.';
+        errorDiv.textContent = 'Please select a valid rank between 1 and 64.';
         errorDiv.classList.add('show');
         return;
     }
